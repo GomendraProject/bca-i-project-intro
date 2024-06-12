@@ -7,6 +7,12 @@ struct User
     char password[500];
 };
 
+void KeyPressPrompt()
+{
+    printf("Press any key to continue..");
+    getch();
+}
+
 
 void ViewUserList()
 {
@@ -26,9 +32,7 @@ void ViewUserList()
         printf("%s \t %s \n", u.username, u.password);
     }
     fclose(fp);
-
-    printf("Press any key to continue..");
-    getch();
+    KeyPressPrompt();
 }
 
 void UpdateUser()
@@ -89,8 +93,7 @@ void UpdateUser()
         remove("tmp.dat");
         printf("Username not found.");
     }
-    printf("Press any key to continue..");
-    getch();
+    KeyPressPrompt();
 }
 
 void DeleteUser()
@@ -148,8 +151,7 @@ void DeleteUser()
         remove("tmp.dat");
         printf("Username not found.");
     }
-    printf("Press any key to continue..");
-    getch();
+    KeyPressPrompt();
 }
 
 void Menu()
@@ -193,7 +195,7 @@ void StartApp()
         printf("Login to proceed \n");
         printf("1. Login \n");
         printf("2. Register \n");
-        printf("1. Exit \n");
+        printf("3. Exit \n");
         printf("Please input your choice: \t");
         scanf("%d", &choice);
 
@@ -202,13 +204,13 @@ void StartApp()
             case 1:
                 if(Login())
                 {
-                    printf("Authentication successful. Press any key to continue..");
-                    getch();
+                    printf("Authentication successful.");
+                    KeyPressPrompt();
                     Menu();
                 }
                 else{
-                    printf("Invalid username / password. Press any key to continue..");
-                    getch();
+                    printf("Invalid username / password");
+                    KeyPressPrompt();
                 }
                 break;
             case 2:
@@ -269,8 +271,8 @@ void Register()
 
     fclose(fp);
 
-    printf("User registered! Press any key to continue..");
-    getch();
+    printf("User registered!");
+    KeyPressPrompt();
 }
 
 int main()
