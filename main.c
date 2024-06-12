@@ -35,7 +35,11 @@ void UpdateUser()
 {
     FILE *fp;
     FILE *tmp;
-    struct User input, fromFile, toTempFile;
+    struct User input, fromFile;
+
+    // Flag to track if we have found the data
+    int dataFound = 0;
+
     system("cls");
     printf("Please enter the username and password \n");
 
@@ -54,6 +58,8 @@ void UpdateUser()
         // We update the data and save it to temp file
         if(strcmp(fromFile.username, input.username) == 0)
         {
+            // Updating to 1, since we have found the data
+            dataFound = 1;
             printf("Input New Password: \t");
             scanf("%s", input.password);
 
@@ -67,10 +73,82 @@ void UpdateUser()
     }
     fclose(fp);
     fclose(tmp);
-    remove("user.dat");
-    rename("tmp.dat", "user.dat");
+    // If we have found the data
+    if(dataFound == 1)
+    {
+        // Remove the original file
+        remove("user.dat");
+        // Rename the temp file to original file
+        rename("tmp.dat", "user.dat");
+        printf("Data updated. \n");
+    }
+    // If we did not find the data
+    else
+    {
+        // Remove the temp file
+        remove("tmp.dat");
+        printf("Username not found.");
+    }
+    printf("Press any key to continue..");
+    getch();
+}
 
-    printf("Data updated. Press any key to continue..");
+void DeleteUser()
+{
+    FILE *fp;
+    FILE *tmp;
+    struct User input, fromFile;
+
+    // Flag to track if we have found the data
+    int dataFound = 0;
+
+    system("cls");
+    printf("Please enter the username and password \n");
+
+    printf("Username: \t");
+    scanf("%s", &input.username);
+
+    fp = fopen("user.dat", "rb");
+    tmp = fopen("tmp.dat", "wb");
+
+    // Read all data from original file
+    while(
+          fread(&fromFile, sizeof(fromFile), 1, fp) == 1
+          )
+    {
+        // If the username of data from file matches
+        // We update the data and save it to temp file
+        if(strcmp(fromFile.username, input.username) == 0)
+        {
+            // Updating to 1, since we have found the data
+            dataFound = 1;
+            // Deleting the data. So, no copying to temp file
+        }
+        // We save the data from original file to temp file
+        else
+        {
+            fwrite(&fromFile, sizeof(fromFile), 1, tmp);
+        }
+    }
+    fclose(fp);
+    fclose(tmp);
+    // If we have found the data
+    if(dataFound == 1)
+    {
+        // Remove the original file
+        remove("user.dat");
+        // Rename the temp file to original file
+        rename("tmp.dat", "user.dat");
+        printf("Data deleted. \n");
+    }
+    // If we did not find the data
+    else
+    {
+        // Remove the temp file
+        remove("tmp.dat");
+        printf("Username not found.");
+    }
+    printf("Press any key to continue..");
     getch();
 }
 
@@ -82,7 +160,8 @@ void Menu()
         system("cls");
         printf("1. View Users \n");
         printf("2. Update User \n");
-        printf("3. Exit \n");
+        printf("3. Delete User \n");
+        printf("4. Exit \n");
         printf("Please make your choice: ");
         scanf("%d", &choice);
 
@@ -95,6 +174,9 @@ void Menu()
             UpdateUser();
             break;
         case 3:
+            DeleteUser();
+            break;
+        case 4:
             exit(0);
         default:
             printf("Invalid choice");
