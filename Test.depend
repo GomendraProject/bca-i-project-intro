@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1718029443 source:d:\projects\college\gomendra\bca-i-test-run\test\main.c
+	<stdio.h>
+	<stdlib.h>
+
