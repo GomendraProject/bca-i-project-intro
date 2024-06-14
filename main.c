@@ -254,6 +254,27 @@ int Login()
     return 0;
 }
 
+int UserNameDuplicated(char username[500])
+{
+    FILE *fp;
+    int found = 0;
+    struct User u;
+    fp = fopen("user.dat", "rb");
+
+    while(
+          fread(&u, sizeof(u), 1, fp) == 1
+          )
+    {
+        if(strcmp(u.username, username) == 0)
+        {
+            found = 1;
+            break;
+        }
+    }
+    fclose(fp);
+    return found;
+}
+
 void Register()
 {
     FILE *fp;
@@ -264,6 +285,13 @@ void Register()
     scanf("%s", &u.username);
     printf("Password: \t");
     scanf("%s", &u.password);
+
+    if(UserNameDuplicated(u.username))
+    {
+        printf("Username duplicated");
+        KeyPressPrompt();
+        return;
+    }
 
     fp = fopen("user.dat", "ab");
 
@@ -280,3 +308,4 @@ int main()
     StartApp();
     return 0;
 }
+
